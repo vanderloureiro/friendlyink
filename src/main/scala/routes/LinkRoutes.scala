@@ -1,11 +1,12 @@
 package dev.vanderloureiro
 package routes
 
-import dev.vanderloureiro.models.Link
-import dev.vanderloureiro.services.LinkService
+import models.Link
+import services.LinkService
+
 import zio.*
-import zio.json.*
 import zio.http.*
+import zio.json.*
 
 object LinkRoutes {
   

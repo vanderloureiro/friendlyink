@@ -1,7 +1,7 @@
 package dev.vanderloureiro
 
-import dev.vanderloureiro.routes.LinkRoutes
-import dev.vanderloureiro.services.LinkService
+import routes.LinkRoutes
+import services.LinkService
 import zio.*
 import zio.http.*
 import zio.ZIOAppDefault
@@ -13,7 +13,7 @@ object Main extends ZIOAppDefault {
   override def run: ZIO[Any, Throwable, Nothing] =
     Server.serve(app).provide(
       Server.default,
-      LinkService.inMemory
+      AppLayers.all
     )
 
 }
