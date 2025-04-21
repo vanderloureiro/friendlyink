@@ -2,6 +2,8 @@ package dev.vanderloureiro
 
 import routes.LinkRoutes
 import services.LinkService
+
+import dev.vanderloureiro.layers.AppLayers
 import zio.*
 import zio.http.*
 import zio.ZIOAppDefault

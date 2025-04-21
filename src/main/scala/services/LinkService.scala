@@ -1,7 +1,7 @@
 package dev.vanderloureiro
 package services
 
-import dev.vanderloureiro.models.Link
+import models.Link
 import zio._
 
 trait LinkService {
