@@ -9,38 +9,38 @@ import zio.http.*
 import zio.json.*
 
 object LinkRoutes {
-  
-  val routes: Routes[LinkService, Response] = Routes(
-    Method.GET / "link" -> handler {
-      (_: Request) => for {
-        links <- LinkService.getAll()
-        json = links.toJson
-      } yield Response.json(json)
-    },
 
-    Method.POST / "link" -> handler { (req: Request) =>
-      for {
-        body <- req.body.asString
-        link <- ZIO.fromEither(body.fromJson[Link])
-        _ <- LinkService.save(link)
-      } yield Response.text("Link salvo com sucesso!")
-    }.catchAll(_ => handler(Response.text("Erro ao salvar link"))),
+  private val listLinks = handler {
+    (_: Request) => for {
+      links <- LinkService.getAll()
+      json = links.toJson
+    } yield Response.json(json)
+  }
 
-    Method.GET / "link" / string("friendly") ->
-      handler { (friendly: String, _: Request) =>
-        LinkService.get(friendly).flatMap {
-          case Some(link) => URL.decode(link.link) match {
-            case Right(url) => ZIO.succeed(Response.redirect(url))
-            case Left(_) => ZIO.succeed(Response.status(Status.NotFound))
-          }
-          case None => ZIO.succeed(Response.status(Status.NotFound))
-        }
-      },
+  private val createLink = handler { (req: Request) =>
+    for {
+      body <- req.body.asString
+      link <- ZIO.fromEither(body.fromJson[Link])
+      _ <- LinkService.save(link)
+    } yield Response.text("Link salvo com sucesso!")
+  }.catchAll(_ => handler(Response.text("Erro ao salvar link")))
 
-    Method.DELETE / "todo" / string("id") ->
-    handler { (id: String, req: Request) =>
-      Response.text(s"This will remove a TODO item with id: $id")
+  private val getLink = handler { (friendly: String, _: Request) =>
+    LinkService.get(friendly).flatMap {
+      case Some(link) => URL.decode(link.link) match {
+        case Right(url) => ZIO.succeed(Response.redirect(url))
+        case Left(_) => ZIO.succeed(Response.status(Status.NotFound))
+      }
+      case None => ZIO.succeed(Response.status(Status.NotFound))
     }
+  }
+
+  val routes: Routes[LinkService, Response] = Routes(
+    Method.GET / "link" -> listLinks,
+
+    Method.POST / "link" -> createLink,
+
+    Method.GET / "link" / string("friendly") -> getLink
   )
 }
 
