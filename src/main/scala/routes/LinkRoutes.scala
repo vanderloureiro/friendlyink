@@ -12,7 +12,7 @@ object LinkRoutes {
 
   private val listLinks = handler {
     (_: Request) => for {
-      links <- LinkService.getAll()
+      links <- LinkService.getAll
       json = links.toJson
     } yield Response.json(json)
   }

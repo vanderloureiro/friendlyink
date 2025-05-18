@@ -9,7 +9,7 @@ trait LinkService {
 
   def get(friendly: String): UIO[Option[Link]]
 
-  def getAll(): UIO[List[Link]]
+  def getAll: UIO[List[Link]]
 }
 
 object LinkService {
@@ -19,7 +19,7 @@ object LinkService {
   def get(friendly: String): ZIO[LinkService, Nothing, Option[Link]] =
     ZIO.serviceWithZIO[LinkService](_.get(friendly))
 
-  def getAll(): ZIO[LinkService, Nothing, List[Link]] =
-    ZIO.serviceWithZIO[LinkService](_.getAll())
+  def getAll: ZIO[LinkService, Nothing, List[Link]] =
+    ZIO.serviceWithZIO[LinkService](_.getAll)
 }
 

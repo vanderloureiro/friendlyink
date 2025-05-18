@@ -12,7 +12,7 @@ final case class LinkServiceLive(ref: Ref[Map[String, Link]]) extends LinkServic
 
   override def get(friendly: String): UIO[Option[Link]] = ref.get.map(_.get(friendly))
 
-  override def getAll(): UIO[List[Link]] = ref.get.map(_.values.toList)
+  override def getAll: UIO[List[Link]] = ref.get.map(_.values.toList)
 }
 
 object LinkServiceLive {
